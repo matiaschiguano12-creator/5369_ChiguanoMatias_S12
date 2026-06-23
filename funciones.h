@@ -1,57 +1,53 @@
+#ifndef FUNCIONES_H
+#define FUNCIONES_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+
+#define VEHICULOS_FILE "vehiculos.dat"
+#define CLIENTES_FILE "clientes.dat"
+#define VENTAS_FILE "ventas.dat"
+
 typedef struct {
-    int id;
+    char placa[10];
+    char tipo[20];
     char marca[30];
-    char modelo[30];
-    char uso[20]; // nuevo, usado
-    int aniofabricacion;
     float precio;
-    int disponibilidad; // 1 = disponible, 0 = vendido
-    char color[20];
-    char comprador[50];
+    char estado[10];
+    int disponible; /* 1 = Disponible, 0 = Vendido */
 } Vehiculo;
 
 typedef struct {
-    int nmrCedula; //ID
+    char cedula[11];
     char nombre[50];
-    char apellido[50];
-    int telefono;
-    float presupuesto;
-    char preferenciaMarca[20]; 
-    char preferenciaUso[20]; 
-    int preferenciaAnio; 
-     
-    char preferenciaColor[20]; 
+    int edad;
 } Cliente;
 
 typedef struct {
-    int nmrCedula; //ID
-    char nombre[50];
-    char apellido[50];
-    int nmrventas;
-} Vendedor;
+    char id_venta[10];
+    char placa_vehiculo[10];
+    char cedula_cliente[11];
+    char vendedor[50];
+    float monto_final;
+} Venta;
 
+/* Utilidades de entrada */
+int readIntInRange(int min, int max);
+float readFloatInRange(float min, float max);
+void readString(char *buffer, size_t size, const char *prompt);
 
-void leerCadena (char *cadena, int n);
-float ValidarFloatRango (float a, float b);
-void AgregarVehiculo();
-void ConsultarVehiculo(Vehiculo *vehiculo);
-void modificarVehiculo(Vehiculo *vehiculo);
-void guardarVehiculoDentroDelArchivo(Vehiculo *vehiculo);
-int menuInterfaz();
-int menuTrabajador();
-int menuCliente();
-int menuGestionVehiculos();
-int menuGestionClientes();
-int menuGestionVendedores();
-void AgregarCliente();
-void guardarClienteDentroDelArchivo(Cliente *cliente);
-void modificarCliente(Cliente *cliente);
-void venderVehiculo(Vehiculo *vehiculo);
-void mostrarVehiculos();
-void consultarVehiculosPorPreferencias(Vehiculo vehiculo, Cliente cliente);
-void mostrarClientes();
-void AgregarVendedor();
-void editarVendedor();
-void mostrarVendedores();
-int CedulaYaRegistrada(int cedula);
-int IdVehiculoYaRegistrada(int id);
+/* Operaciones de persistencia y negocio */
+int addVehiculo(const Vehiculo *v);
+int addCliente(const Cliente *c);
+int addVenta(const Venta *v);
+int markVehiculoVendido(const char *placa);
+void listarVehiculosPorPreferencias(const char *tipo, const char *marca, const char *estado, float precio_max);
+int encontrarVehiculoPorPlaca(const char *placa, long *offset_out);
+/* Funciones adicionales */
+void mostrarInventario(void);
+void mostrarClientes(void);
+void mostrarVentas(void);
+
+#endif /* FUNCIONES_H */

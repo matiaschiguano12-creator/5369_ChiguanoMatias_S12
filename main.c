@@ -1,226 +1,67 @@
 #include <stdio.h>
+#include <string.h>
 #include "funciones.h"
 
-int main (int argc, char *argv[]){
+void mostrarMenu() {
+    printf("\n--- SGIC - Ruedas de Oro ---\n");
+        printf("1. Agregar vehiculo\n");
+        printf("2. Agregar cliente\n");
+        printf("3. Registrar venta\n");
+        printf("4. Mostrar inventario\n");
+        printf("5. Mostrar clientes\n");
+        printf("6. Buscar vehiculos por preferencias\n");
+        printf("7. Mostrar historial de ventas\n");
+        printf("8. Salir\n");
+        printf("Elija una opcion: ");
+}
 
-    int opc1 = 0;
-    int opc2 = 0;
-    int opc3 = 0;
-    int opc4 = 0;
-    int opc5 = 0;
-    int opc6 = 0;
-    int opc11 = 0;
-    int opc12 = 0;
-    int opc13 = 0;
-    int opc14 = 0;
-    int opc15 = 0;
-    int opc16 = 0;
+int main(void) {
+    int opcion;
+    char buf[128];
 
-    Vehiculo vehiculo;
-    Cliente cliente;
-    Vendedor vendedor;
-
-    do //opc1, opc2
-    {
-        opc1 = menuInterfaz();
-
-        
-            switch (opc1)
-            {
-            case 1:
-
-                do{
-                   
-                    opc3 = menuTrabajador();
-
-                    switch (opc3)
-                    {
-                    case 1:
-
-                        do {    
-                            opc5 = menuGestionVehiculos();
-
-                            switch (opc5)
-                            {
-                            case 1:
-                                
-                                AgregarVehiculo();
-                                
-                                break;
-
-                            case 2:
-
-                                ConsultarVehiculo(&vehiculo);    
-
-                                break;
-
-                            case 3:
-
-                                modificarVehiculo(&vehiculo);
-
-                                break;
-
-                            case 4:
-
-                                consultarVehiculosPorPreferencias(vehiculo, cliente);
-
-                                break;
-
-                            case 5:
-
-                                venderVehiculo(&vehiculo);
-
-                                break;
-
-                            case 6:
-
-                                mostrarVehiculos();
-
-                                break;
-
-                            default:
-                                break;
-                            }
-                    
-                        
-                            printf("Desea seleccionar otra opccion del menu de vehiculos? (1.Si / 2.No)\n");
-                            printf(">>> ");
-                            opc6 = ValidarFloatRango(1,2);
-
-                        }while (opc6 == 1);
-
-                        break;
-
-                
-
-                    case 2:
-
-                        do{
-
-                            opc11 = menuGestionClientes();
-
-                            switch (opc11)
-                            {
-                            case 1:
-
-                                AgregarCliente();
-
-                                break;
-
-                            case 2:
-
-                                modificarCliente(&cliente);
-
-                                break;
-
-                            case 3: 
-
-                                mostrarClientes();
-
-                                break;
-                            
-                            default:
-                                break;
-                            }
-
-                            printf("Desea Seleccionar otra opcion del menu de clientes? ( 0 = SI, 1 = NO )\n");
-                            printf(">>> ");
-
-                            opc12 = ValidarFloatRango(0,1);
-                        } while (opc12 == 1);
-                    
-                        break;
-                        
-                    case 3:
-
-
-                        do{
-
-                            opc13 = menuGestionVendedores();
-
-                            switch (opc13)
-                            {
-                            case 1:
-                                
-                                AgregarVendedor();
-
-                                break;
-                            
-                            case 2:
-
-                                editarVendedor();
-
-                                break;
-                        
-                            case 3:
-                            
-                                mostrarVendedores();
-
-                                break;
-
-                            default:
-                                break;
-                            }
-
-                            printf("Desea Seleccionar otra opcion del menu de vendedores? ( 0 = SI, 1 = NO )\n");
-                            printf(">>> ");
-
-                            opc14 = ValidarFloatRango(0,1);
-                        } while (opc14 == 0);
-                
-
-                        break;
-
-                    default:
-                        break;
-                    
-                    }
-
-                    printf("Desea Seleccionar otra opcion del menu de trabajador( 0 = SI, 1 = NO )\n");
-                    printf(">>> ");
-                    opc4 = ValidarFloatRango(0,1);
-
-                }while (opc4 == 0);
-            
-            case 2:
-        
-                do
-                {
-                    opc15 = menuCliente();
-                    
-                    switch (opc15)
-                    {
-                    case 1 :
-
-                        mostrarVehiculos();
-
-                        break;
-                    
-                    case 2:
-
-                        consultarVehiculosPorPreferencias(vehiculo, cliente);
-                    default:
-                        break;
-                    }
-                    
-                    printf("Desea Seleccionar otra opcion del menu Clientela ( 0 = SI, 1 = NO )\n");
-                    printf(">>> ");
-
-                    
-                    opc16 = ValidarFloatRango(0,1);
-                } while (opc16 == 0);
-                
-                break;
-            default:
-                break;
-            }
-
-        printf("Desea entrar como Trabajador o cliente ( 1 =  TRABAJADOR, 2 = CLIENTE )\n");
-        printf(">>> ");
-        opc2 = ValidarFloatRango(1,2);
-    } while (opc2 == 1);
-    
-
+    while (1) {
+        mostrarMenu();
+        opcion = readIntInRange(1, 8);
+        if (opcion == 1) {
+            Vehiculo v;
+            readString(v.placa, sizeof(v.placa), "Placa: ");
+            readString(v.tipo, sizeof(v.tipo), "Tipo: ");
+            readString(v.marca, sizeof(v.marca), "Marca: ");
+            printf("Precio: "); v.precio = readFloatInRange(0.0f, 10000000.0f);
+            readString(v.estado, sizeof(v.estado), "Estado (Nuevo/Usado): ");
+            if (addVehiculo(&v) == 0) printf("Vehiculo agregado correctamente.\n"); else printf("Error al agregar vehiculo.\n");
+        } else if (opcion == 2) {
+            Cliente c;
+            readString(c.cedula, sizeof(c.cedula), "Cedula: ");
+            readString(c.nombre, sizeof(c.nombre), "Nombre: ");
+            printf("Edad: "); c.edad = readIntInRange(0, 120);
+            if (addCliente(&c) == 0) printf("Cliente agregado correctamente.\n"); else printf("Error al agregar cliente.\n");
+        } else if (opcion == 3) {
+            Venta v;
+            readString(v.id_venta, sizeof(v.id_venta), "ID Venta: ");
+            readString(v.placa_vehiculo, sizeof(v.placa_vehiculo), "Placa vehiculo: ");
+            readString(v.cedula_cliente, sizeof(v.cedula_cliente), "Cedula cliente: ");
+            readString(v.vendedor, sizeof(v.vendedor), "Vendedor: ");
+            printf("Monto final: "); v.monto_final = readFloatInRange(0.0f, 10000000.0f);
+            if (addVenta(&v) == 0) printf("Venta registrada correctamente.\n"); else printf("Error al registrar venta.\n");
+        } else if (opcion == 4) {
+            mostrarInventario();
+        } else if (opcion == 5) {
+            mostrarClientes();
+        } else if (opcion == 6) {
+            char tipo[32], marca[32], estado[16];
+            float precio_max;
+            readString(tipo, sizeof(tipo), "Tipo (enter para omitir): ");
+            readString(marca, sizeof(marca), "Marca (enter para omitir): ");
+            readString(estado, sizeof(estado), "Estado (Nuevo/Usado) (enter para omitir): ");
+            printf("Precio maximo (0 para omitir): "); precio_max = readFloatInRange(0.0f, 10000000.0f);
+            listarVehiculosPorPreferencias(tipo, marca, estado, precio_max);
+        } else if (opcion == 7) {
+            mostrarVentas();
+        } else if (opcion == 8) {
+            printf("Saliendo...\n");
+            break;
+        }
+    }
     return 0;
-
 }
